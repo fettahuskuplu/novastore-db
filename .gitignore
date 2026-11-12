@@ -1,0 +1,17 @@
+# SQL Server
+*.bak
+*.trn
+*.mdf
+*.ldf
+*.ndf
+
+# IDE & Editor
+.vs/
+.vscode/
+*.suo
+*.user
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
