@@ -151,3 +151,26 @@ ORDER BY TotalRevenue DESC;
 SELECT OrderID, OrderDate, DATEDIFF(DAY, OrderDate, GETDATE()) AS DaysPassed
 FROM Orders;
 GO
+
+-- Bölüm 4: İleri Seviye Veri Tabanı Nesneleri
+
+-- 1. Sipariş Özet Görünümü (View)
+CREATE VIEW vw_SiparisOzet AS
+SELECT 
+    C.FullName,
+    O.OrderDate,
+    P.ProductName,
+    OD.Quantity
+FROM Customers C
+INNER JOIN Orders O ON C.CustomerID = O.CustomerID
+INNER JOIN OrderDetails OD ON O.OrderID = OD.OrderID
+INNER JOIN Products P ON OD.ProductID = P.ProductID;
+GO
+
+SELECT * FROM vw_SiparisOzet;
+GO
+
+-- 2. Veri Tabanı Yedekleme (Backup)
+BACKUP DATABASE NovaStoreDB
+TO DISK = 'C:\Yedek\NovaStoreDB.bak';
+GO
