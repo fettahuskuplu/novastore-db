@@ -174,3 +174,24 @@ GO
 BACKUP DATABASE NovaStoreDB
 TO DISK = 'C:\Yedek\NovaStoreDB.bak';
 GO
+
+-- Ek Geliştirmeler: Veri Bütünlüğü Kısıtlamaları ve Performans İndeksleri
+
+-- CHECK Kısıtlamaları
+ALTER TABLE Products
+    ADD CONSTRAINT CK_Products_Price CHECK (Price > 0),
+        CONSTRAINT CK_Products_Stock CHECK (Stock >= 0);
+
+ALTER TABLE Orders
+    ADD CONSTRAINT CK_Orders_TotalAmount CHECK (TotalAmount >= 0);
+
+ALTER TABLE OrderDetails
+    ADD CONSTRAINT CK_OrderDetails_Quantity CHECK (Quantity > 0);
+GO
+
+-- Foreign Key İndeksleri
+CREATE NONCLUSTERED INDEX IX_Products_CategoryID ON Products(CategoryID);
+CREATE NONCLUSTERED INDEX IX_Orders_CustomerID ON Orders(CustomerID);
+CREATE NONCLUSTERED INDEX IX_OrderDetails_OrderID ON OrderDetails(OrderID);
+CREATE NONCLUSTERED INDEX IX_OrderDetails_ProductID ON OrderDetails(ProductID);
+GO
