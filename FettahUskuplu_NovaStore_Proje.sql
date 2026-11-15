@@ -111,3 +111,43 @@ INSERT INTO OrderDetails (OrderID, ProductID, Quantity) VALUES
 (9, 8, 1),
 (10, 10, 1);
 GO
+
+-- Bölüm 3: Sorgulama ve Analiz (DQL)
+
+-- 1. Stok miktarı 20'den az olan ürünlerin azalan sırada listelenmesi
+SELECT ProductName, Stock
+FROM Products
+WHERE Stock < 20
+ORDER BY Stock DESC;
+
+-- 2. Müşteri sipariş listesi (INNER JOIN)
+SELECT C.FullName, C.City, O.OrderDate, O.TotalAmount
+FROM Customers C
+INNER JOIN Orders O ON C.CustomerID = O.CustomerID;
+
+-- 3. Ahmet Yılmaz isimli müşterinin aldığı ürünler (Çoklu JOIN)
+SELECT C.FullName, P.ProductName, P.Price, Cat.CategoryName
+FROM Customers C
+INNER JOIN Orders O ON C.CustomerID = O.CustomerID
+INNER JOIN OrderDetails OD ON O.OrderID = OD.OrderID
+INNER JOIN Products P ON OD.ProductID = P.ProductID
+INNER JOIN Categories Cat ON P.CategoryID = Cat.CategoryID
+WHERE C.FullName = 'Ahmet Yılmaz';
+
+-- 4. Kategori bazlı toplam ürün sayısı (LEFT JOIN ve GROUP BY)
+SELECT Cat.CategoryName, COUNT(P.ProductID) AS ProductCount
+FROM Categories Cat
+LEFT JOIN Products P ON Cat.CategoryID = P.CategoryID
+GROUP BY Cat.CategoryName;
+
+-- 5. Müşteri bazlı toplam ciro analizi (SUM, GROUP BY ve ORDER BY)
+SELECT C.FullName, SUM(O.TotalAmount) AS TotalRevenue
+FROM Customers C
+INNER JOIN Orders O ON C.CustomerID = O.CustomerID
+GROUP BY C.CustomerID, C.FullName
+ORDER BY TotalRevenue DESC;
+
+-- 6. Siparişlerin üzerinden geçen gün sayısı (DATEDIFF ve GETDATE)
+SELECT OrderID, OrderDate, DATEDIFF(DAY, OrderDate, GETDATE()) AS DaysPassed
+FROM Orders;
+GO
